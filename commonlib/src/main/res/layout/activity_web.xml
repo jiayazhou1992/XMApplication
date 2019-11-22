@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/root">
+
+    <include layout="@layout/title_web_bar"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:indeterminateOnly="false"
+        android:max="100"
+        android:progressDrawable="@drawable/bg_progressbar_web"/>
+
+
+   <FrameLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+       <com.xiaomawang.commonlib.ui.web.SWebView
+           android:id="@+id/webView"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:overScrollMode="never"
+           android:fadingEdge="none"
+           android:visibility="visible"/>
+
+       <LinearLayout
+           android:id="@+id/ll_status"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:background="@color/page_bg"
+           android:orientation="vertical"
+           android:gravity="center"
+           android:clickable="true"
+           android:visibility="gone">
+           <ImageView
+               android:id="@+id/iv_status"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:scaleType="centerInside"
+               android:src="@drawable/ic_pagestatus_empty" />
+           <TextView
+               android:id="@+id/tv_status_msg"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="@dimen/textsize1"
+               android:textColor="@color/black_tran60"
+               android:text="暂无数据"/>
+       </LinearLayout>
+
+   </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- SWebView -->
+    <declare-styleable name="SWebView">
+        <attr name="UserAgent" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="SideSlipLayout">
+        <attr name="slipLength" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="BottomNavItem">
+        <attr name="icons" format="reference"/>
+        <attr name="lableColors" format="reference"/>
+        <attr name="lableStr" format="string"/>
+        <attr name="labelSize" format="dimension"/>
+    </declare-styleable>
+
+    <!---->
+    <declare-styleable name="TableView">
+        <attr name="tableColors" format="reference"/>
+        <attr name="table" format="string"/>
+        <attr name="selected_type" format="enum">
+            <enum name="change_color" value="0"/>
+            <enum name="change_size" value="1"/>
+        </attr>
+    </declare-styleable>
+
+    <!-- Tab -->
+    <declare-styleable name="Tab">
+        <attr name="tab_text" format="string"/>
+        <attr name="tab_selected_textColor" format="color"/>
+        <attr name="tab_unselected_textColor" format="color"/>
+        <attr name="tab_textSize" format="dimension"/>
+        <attr name="tab_selected_textSize" format="dimension"/>
+        <attr name="tab_unselected_textSize" format="dimension"/>
+        <attr name="tab_textBold" format="boolean"/>
+        <attr name="tab_icon" format="reference"/>
+        <attr name="tab_indicator_color" format="color"/>
+        <attr name="tab_indicator_width" format="dimension"/>
+        <attr name="tab_indicator_height" format="dimension"/>
+    </declare-styleable>
+
+    <!---->
+    <declare-styleable name="LableView">
+        <attr name="lable_Str" format="string"/>
+        <attr name="lable_gravity" format="enum">
+            <enum name="top" value="0"/>
+            <enum name="center_vertical" value="1"/>
+            <enum name="bottom" value="2"/>
+        </attr>
+        <attr name="contentHint" format="string"/>
+        <attr name="contentStr" format="string"/>
+        <attr name="label_contentHintColor" format="color"/>
+        <attr name="lable_textsize" format="dimension"/>
+        <attr name="lable_contentSize" format="dimension"/>
+        <attr name="lable_contentColor" format="color"/>
+        <attr name="lable_textcolor" format="color"/>
+        <attr name="label_bold" format="boolean"/>
+        <attr name="label_contentSingle" format="boolean"/>
+        <attr name="lable_icon" format="reference"/>
+        <attr name="label_right_icon" format="reference"/>
+        <attr name="lable_contentBold" format="boolean"/>
+        <attr name="lable_content_type" format="enum">
+            <enum name="spanner" value="0"/>
+            <enum name="jump" value="1"/>
+        </attr>
+        <attr name="label_width" format="dimension"/>
+        <attr name="label_content_gravity">
+            <enum name="left" value="1"/>
+            <enum name="right" value="0"/>
+        </attr>
+
+    </declare-styleable>
+
+    <!---->
+    <declare-styleable name="VerticalLableView">
+        <attr name="vl_lable_Str" format="string"/>
+        <attr name="vl_contentStr" format="string"/>
+        <attr name="vl_contentHint" format="string"/>
+        <attr name="vl_contentSize" format="dimension"/>
+        <attr name="vl_contentColor" format="color"/>
+        <attr name="vl_contentBold" format="boolean"/>
+    </declare-styleable>
+
+    <!---->
+    <declare-styleable name="LableEditView">
+        <attr name="le_lable_Str" format="string"/>
+        <attr name="le_labelSize" format="dimension"/>
+        <attr name="le_labelColor" format="color"/>
+        <attr name="le_labelGravity" format="enum">
+            <enum name="top" value="0"/>
+            <enum name="center_vertical" value="1"/>
+            <enum name="bottom" value="2"/>
+        </attr>
+        <attr name="le_inputType" format="enum">
+            <enum name="number" value="0"/>
+            <enum name="text" value="1"/>
+            <enum name="number_int" value="2"/>
+            <enum name="textVisiblePassword" value="3"/>
+        </attr>
+        <attr name="le_length" format="integer"/>
+        <attr name="le_designHintEnabled" format="boolean"/>
+        <attr name="le_content_hint" format="string"/>
+        <attr name="le_contentSize" format="dimension"/>
+        <attr name="le_contentColor" format="color"/>
+        <attr name="le_contentHintColor" format="color"/>
+        <attr name="le_tip" format="string"/>
+        <attr name="le_spanner" format="boolean"/>
+        <attr name="le_label_width" format="dimension"/>
+        <attr name="le_label_content_gravity">
+            <enum name="left" value="1"/>
+            <enum name="right" value="0"/>
+        </attr>
+    </declare-styleable>
+
+    <!---->
+    <declare-styleable name="SlidingTabIndicatorLayout">
+        <attr name="SlidingTabIndicatorLayout_indicator_width" format="dimension"/>
+        <attr name="SlidingTabIndicatorLayout_indicator_height" format="dimension"/>
+        <attr name="SlidingTabIndicatorLayout_indicator_color" format="color"/>
+    </declare-styleable>
+
+    <!---->
+    <declare-styleable name="CircleProgressBar">
+        <attr name="backgroudProgressColor" format="color"/>
+        <attr name="foregroudProgressColor" format="color"/>
+        <attr name="mStrokeWidth" format="dimension"/>
+        <attr name="mTextColor" format="dimension"/>
+        <attr name="mTextSize" format="dimension"/>
+    </declare-styleable>
+
+    <!---->
+    <declare-styleable name="Indicator">
+        <attr name="indicator_count" format="integer"/>
+        <attr name="indicator_margin" format="dimension"/>
+        <attr name="indicator_radius" format="dimension"/>
+    </declare-styleable>
+
+    <!---->
+    <declare-styleable name="LoopView">
+        <attr name="view_gravity">
+            <enum name="center" value="17" />
+            <enum name="left" value="3" />
+            <enum name="right" value="5" />
+        </attr>
+        <attr name="lineColor" format="color" />
+        <attr name="topBottomTextColor" format="color" />
+        <attr name="centerTextColor" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="isCanLoop" format="boolean" />
+        <attr name="initPosition" format="integer" />
+        <attr name="drawItemCount" format="integer" />
+        <attr name="lineSpacingMultiplier" format="float" />
+
+
+        <!--set number of item displayed, default is 3-->
+        <attr name="npv_ShowCount" format="reference|integer" />
+        <!--set if show divider, default is true-->
+        <attr name="npv_ShowDivider" format="reference|boolean" />
+        <attr name="npv_DividerColor" format="reference|color" />
+        <attr name="npv_DividerMarginLeft" format="reference|dimension" />
+        <attr name="npv_DividerMarginRight" format="reference|dimension" />
+        <attr name="npv_DividerHeight" format="reference|dimension" />
+        <attr name="npv_TextColorNormal" format="reference|color" />
+        <attr name="npv_TextColorSelected" format="reference|color" />
+        <attr name="npv_TextColorHint" format="reference|color" />
+        <attr name="npv_TextSizeNormal" format="reference|dimension" />
+        <attr name="npv_TextSizeSelected" format="reference|dimension" />
+        <attr name="npv_TextSizeHint" format="reference|dimension" />
+        <attr name="npv_TextArray" format="reference" />
+        <attr name="npv_MinValue" format="reference|integer" />
+        <attr name="npv_MaxValue" format="reference|integer" />
+        <attr name="npv_WrapSelectorWheel" format="reference|boolean" />
+        <attr name="npv_RespondChangeOnDetached" format="reference|boolean" />
+        <attr name="npv_HintText" format="reference|string" />
+        <attr name="npv_EmptyItemHint" format="reference|string" />
+        <attr name="npv_MarginStartOfHint" format="reference|dimension" />
+        <attr name="npv_MarginEndOfHint" format="reference|dimension" />
+        <attr name="npv_ItemPaddingHorizontal" format="reference|dimension" />
+        <attr name="npv_ItemPaddingVertical" format="reference|dimension" />
+        <attr name="npv_RespondChangeInMainThread" format="reference|boolean" />
+        <attr name="npv_TextEllipsize" format="reference|string" />
+
+        <!--just used to measure maxWidth for wrap_content without hint,
+            the string array will never be displayed.
+            you can set this attr if you want to keep the wraped numberpickerview
+            width unchanged when alter the content list-->
+        <attr name="npv_AlternativeTextArrayWithMeasureHint" format="reference" />
+        <attr name="npv_AlternativeTextArrayWithoutMeasureHint" format="reference" />
+        <!--the max length of hint content-->
+        <attr name="npv_AlternativeHint" format="reference|string" />
+    </declare-styleable>
+
+    <!-- 加减控件 -->
+    <declare-styleable name="AmountView">
+        <attr name="btnWidth" format="dimension" />
+        <attr name="tvWidth" format="dimension" />
+        <attr name="tvTextSize" format="dimension" />
+        <attr name="btnTextSize" format="dimension" />
+        <attr name="element" format="integer"/>
+        <attr name="minCount" format="integer"/>
+        <attr name="maxCount" format="integer"/>
+    </declare-styleable>
+
+    <!-- refreshAttrs -->
+    <declare-styleable name="RefreshLayoutAttrs">
+
+    </declare-styleable>
+
+    <!-- ShadowContainer -->
+    <declare-styleable name="ShadowContainer">
+        <attr name="containerShadowColor" format="color"/>
+        <attr name="containerBackgroundColor" format="color"/>
+        <attr name="containerShadowRadius" format="dimension"/>
+        <attr name="containerDeltaLength" format="dimension"/>
+        <attr name="containerDeltaLengthLeft" format="dimension"/>
+        <attr name="containerDeltaLengthRight" format="dimension"/>
+        <attr name="containerDeltaLengthTop" format="dimension"/>
+        <attr name="containerDeltaLengthBottom" format="dimension"/>
+        <attr name="containerCornerRadius" format="dimension"/>
+        <attr name="deltaX" format="dimension"/>
+        <attr name="deltaY" format="dimension"/>
+    </declare-styleable>
+
+    <!-- lock9view -->
+    <declare-styleable name="Lock9View">
+        <attr name="lock9_defColor" format="color|reference"/>
+        <attr name="lock9_nodeSrc" format="color|reference" />
+        <attr name="lock9_nodeOnSrc" format="color|reference" />
+        <attr name="lock9_node_error_OnSrc" format="color|reference" />
+        <attr name="lock9_nodeSize" format="dimension" />
+        <attr name="lock9_nodeAreaExpand" format="dimension" />
+        <attr name="lock9_nodeOnAnim" format="reference" />
+        <attr name="lock9_lineColor" format="color" />
+        <attr name="lock9_error_lineColor" format="color" />
+        <attr name="lock9_lineWidth" format="dimension" />
+        <attr name="lock9_padding" format="dimension" />
+        <attr name="lock9_spacing" format="dimension" />
+        <attr name="lock9_autoLink" format="boolean" />
+        <attr name="lock9_linkage" format="boolean" />
+        <attr name="lock9_enableVibrate" format="boolean" />
+        <attr name="lock9_vibrateTime" format="integer" />
+        <attr name="lock9_defRadius" format="dimension"/>
+    </declare-styleable>
+
+    <!-- MZBannerView -->
+    <declare-styleable name="MZBannerView">
+        <attr name="open_mz_mode" format="boolean"/>
+        <attr name="canLoop" format="boolean"/>
+        <attr name="indicatorPaddingLeft" format="dimension"/>
+        <attr name="indicatorPaddingRight" format="dimension"/>
+        <attr name="indicatorPaddingTop" format="dimension"/>
+        <attr name="indicatorPaddingBottom" format="dimension"/>
+        <attr name="indicatorAlign">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+        <attr name="middle_page_cover" format="boolean"/>
+        <attr name="indicatorunSelectRes" format="reference"/>
+        <attr name="indicatorSelectRes" format="reference"/>
+    </declare-styleable>
+
+    <!-- TagFlowLayout -->
+    <declare-styleable name="TagFlowLayout">
+        <attr name="itemTouchCheckable" format="boolean"/>
+        <attr name="cancelSelectable" format="boolean"/>
+        <attr name="max_select" format="integer"></attr>
+        <attr name="tag_gravity">
+            <enum name="left" value="-1" />
+            <enum name="center" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <!-- CardViewFix -->
+    <declare-styleable name="CardViewFix">
+        <attr name="cardBackgroundColor" format="color" />
+        <attr name="cardCornerRadius" format="dimension" />
+        <attr name="cardElevation" format="dimension" />
+        <attr name="cardMaxElevation" format="dimension" />
+        <attr name="cardUseCompatPadding" format="boolean" />
+        <attr name="cardPreventCornerOverlap" format="boolean" />
+        <attr name="contentPadding" format="dimension" />
+        <attr name="contentPaddingLeft" format="dimension" />
+        <attr name="contentPaddingRight" format="dimension" />
+        <attr name="contentPaddingTop" format="dimension" />
+        <attr name="contentPaddingBottom" format="dimension" />
+
+        <attr name="cardShadowColorStart" format="color" />
+        <attr name="cardShadowColorEnd" format="color" />
+
+        <attr name="android:minWidth" />
+        <attr name="android:minHeight" />
+    </declare-styleable>
+
+    <!-- EditTextWithClear -->
+    <declare-styleable name="EditTextWithClear">
+        <attr name="clearIcon" format="reference"/>
+    </declare-styleable>
+
+    <!-- HomeTagsLayout -->
+    <declare-styleable name="HomeTagsLayout">
+        <attr name="itemLayout" format="reference"/>
+    </declare-styleable>
+</resources>

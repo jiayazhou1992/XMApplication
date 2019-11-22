@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+
+    <ImageButton
+        android:id="@+id/btnDecrease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/renovate_icon_minus"
+        android:minWidth="30dp"
+        android:minHeight="30dp" />
+    <EditText
+        android:id="@+id/etAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="50dp"
+        android:paddingLeft="@dimen/padding_1"
+        android:paddingRight="@dimen/padding_1"
+        android:background="@null"
+        android:inputType="number"
+        android:gravity="center"
+        android:enabled="false"
+        android:textSize="@dimen/textsize2"
+        android:textColor="@color/black_tran90"/>
+    <ImageButton
+        android:id="@+id/btnIncrease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/renovate_icon_add"
+        android:minWidth="30dp"
+        android:minHeight="30dp" />
+
+</LinearLayout>

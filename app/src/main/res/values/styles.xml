@@ -1,0 +1,56 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/AppWindowAnimationStyle</item>
+    </style>
+
+    <style name="AppTheme_welcome" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="android:windowBackground">@drawable/bg_splash</item>-->
+    </style>
+
+    <style name="AppTheme_Router" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/AppWindowAnimationStyle</item>
+    </style>
+
+    <style name="AppTheme_Transparent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/TranWindowAnimationStyle</item>
+    </style>
+
+    <style name="Dialog_Transparent" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowIsTranslucent">true</item><!--半透明-->
+        <item name="android:windowNoTitle">true</item><!--无标题-->
+        <item name="android:windowBackground">@color/transparent</item><!--背景透明-->
+        <item name="android:backgroundDimEnabled">true</item><!--模糊-->
+        <item name="android:backgroundDimAmount">0.1</item>
+    </style>
+
+    <style name="AppWindowAnimationStyle">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter_anim</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit_anim</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter_anim</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit_anim</item>
+    </style>
+
+    <style name="TranWindowAnimationStyle">
+        <item name="android:windowExitAnimation">@anim/window_exit_transparent_anim</item>
+        <item name="android:windowEnterAnimation">@anim/window_enter_transparent_anim</item>
+    </style>
+
+</resources>

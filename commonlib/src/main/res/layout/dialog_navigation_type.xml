@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/page_bg_dark">
+
+    <TextView
+        android:id="@+id/tv_baidu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dimen_16"
+        android:paddingBottom="@dimen/dimen_16"
+        android:background="@color/page_bg"
+        android:gravity="center"
+        android:textColor="@color/black_tran90"
+        android:textSize="@dimen/textsize2"
+        android:text="百度地图"/>
+
+    <TextView
+        android:id="@+id/tv_amap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dimen_16"
+        android:paddingBottom="@dimen/dimen_16"
+        android:background="@color/page_bg"
+        android:layout_marginTop="@dimen/line"
+        android:gravity="center"
+        android:textColor="@color/black_tran90"
+        android:textSize="@dimen/textsize2"
+        android:text="高德地图"/>
+
+    <TextView
+        android:id="@+id/tv_tx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dimen_16"
+        android:paddingBottom="@dimen/dimen_16"
+        android:background="@color/page_bg"
+        android:layout_marginTop="@dimen/line"
+        android:gravity="center"
+        android:textColor="@color/black_tran90"
+        android:textSize="@dimen/textsize2"
+        android:text="腾讯地图"/>
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dimen_16"
+        android:paddingBottom="@dimen/dimen_16"
+        android:background="@color/page_bg"
+        android:layout_marginTop="@dimen/dimen_8"
+        android:gravity="center"
+        android:textColor="@color/black_tran90"
+        android:textSize="@dimen/textsize2"
+        android:text="取消"/>
+
+</LinearLayout>
