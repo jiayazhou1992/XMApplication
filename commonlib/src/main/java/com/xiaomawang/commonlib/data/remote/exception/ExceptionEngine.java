@@ -3,6 +3,7 @@ package com.xiaomawang.commonlib.data.remote.exception;
 import android.util.MalformedJsonException;
 
 import com.google.gson.JsonParseException;
+import com.xiaomawang.commonlib.data.remote.ServerException;
 
 import org.json.JSONException;
 

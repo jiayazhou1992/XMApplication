@@ -2,12 +2,11 @@ package com.xiaomawang.commonlib.data.remote;
 
 import com.xiaomawang.commonlib.data.remote.exception.ApiException;
 import com.xiaomawang.commonlib.data.remote.exception.ExceptionEngine;
-import com.xiaomawang.commonlib.data.remote.exception.ServerException;
 
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-public class BaseHttpSubscriber<T> implements Subscriber<BaseDto<T>> {
+public abstract class HttpSubscriber<T> implements Subscriber<BaseDto<T>> {
 
     @Override
     public void onSubscribe(Subscription s) {
@@ -23,17 +22,21 @@ public class BaseHttpSubscriber<T> implements Subscriber<BaseDto<T>> {
                 t.getCode() == HttpsConstant.RespCode.R002){ //令牌无效
 
         } else{
-//            ex = ExceptionEngine.handleException(new ServerException(t.getCode(), t.getMessage()));
+            ExceptionEngine.handleException(new ServerException(t.getCode(), t.getMessage()));
         }
     }
 
     @Override
     public void onError(Throwable t) {
-//        ex = ExceptionEngine.handleException(t);
+        ExceptionEngine.handleException(t);
     }
 
     @Override
     public void onComplete() {
 
     }
+
+    public abstract void onSuccess(T t);
+
+    public abstract void onFailed(ApiException e);
 }
