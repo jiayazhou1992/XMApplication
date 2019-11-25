@@ -1,4 +1,4 @@
-package com.xiaomawang.commonlib.widget.net;
+package com.xiaomawang.commonlib.data.remote;
 
 public class HttpsConstant {
 

@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.RequiresApi;
 
 import com.xiaomawang.commonlib.R;
+import com.xiaomawang.commonlib.R2;
 import com.xiaomawang.commonlib.base.BaseConstans;
 import com.xiaomawang.commonlib.base.XMApplication;
 import com.xiaomawang.commonlib.base.XMFragment;
@@ -31,13 +32,15 @@ import com.xiaomawang.commonlib.widget.picselect.PicSelectHelper;
 import java.io.File;
 import java.util.HashMap;
 
+import butterknife.BindView;
+
 public abstract class BaseWebFragment extends XMFragment implements WebContract.View{
     private static final String TAG = "BaseWebFragment";
 
     protected ImageView iv_close;
     protected ImageView iv_share;
     protected ProgressBar progressBar;
-    protected SWebView mWebView;
+    @BindView(R2.id.webView) SWebView mWebView;
 
     // web配置
     protected WebContract.WebOptions webOptions;
@@ -96,32 +99,27 @@ public abstract class BaseWebFragment extends XMFragment implements WebContract.
     @Override
     protected void initView() {
         progressBar = findView(R.id.progressBar);
-        mWebView = findView(R.id.webView);
-    }
 
-    @Override
-    protected void setView() {
         iv_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 closeView();
             }
         });
-
         this.mWebView.setOnLoadListenerCallBack(this);
         this.mWebView.setOpenFileChooserCallBack(this);
         this.mWebView.setHorizontalScrollBarEnabled(false);
-
-        try {
-            jsInterface = webOptions.jsInterfaceClass.newInstance();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (java.lang.InstantiationException e) {
-            e.printStackTrace();
+        if (webOptions != null && webOptions.jsInterfaceClass != null) {
+            try {
+                jsInterface = webOptions.jsInterfaceClass.newInstance();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (java.lang.InstantiationException e) {
+                e.printStackTrace();
+            }
+            jsInterface.attachView(mWebView, this);
+            this.mWebView.addJavascriptInterface(jsInterface, webOptions.mScriptName);
         }
-        jsInterface.attachView(mWebView, this);
-
-        this.mWebView.addJavascriptInterface(jsInterface, webOptions.mScriptName);
 
         pageStatusManager.setReloadClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +128,22 @@ public abstract class BaseWebFragment extends XMFragment implements WebContract.
                 mWebView.reload();
             }
         });
+
+        if (!StringUtils.isEmpty(mUrl)) {
+            if (ValidatorUtils.isAndroidUrl(mUrl)) {
+                if (addExtra){
+                    mUrl = mUrl + webOptions.getExtraParams(mUrl);
+                }
+                mReferer = mUrl;
+                if (addHeader) {
+                    mWebView.loadUrl(mUrl, webOptions.addExtraHeaders(mUrl, mHeaders));
+                }else {
+                    mWebView.loadUrl(mUrl);
+                }
+            }else {
+                mWebView.loadDataWithBaseURL(null,mUrl,"text/html", "utf-8", null);
+            }
+        }
     }
 
 
@@ -167,25 +181,6 @@ public abstract class BaseWebFragment extends XMFragment implements WebContract.
     @Override
     public void closeView() {
         fragmentBack();
-    }
-
-    @Override
-    protected void setData() {
-        if (!StringUtils.isEmpty(mUrl)) {
-            if (ValidatorUtils.isAndroidUrl(mUrl)) {
-                if (addExtra){
-                    mUrl = mUrl + webOptions.getExtraParams(mUrl);
-                }
-                mReferer = mUrl;
-                if (addHeader) {
-                    mWebView.loadUrl(mUrl, webOptions.addExtraHeaders(mUrl, mHeaders));
-                }else {
-                    mWebView.loadUrl(mUrl);
-                }
-            }else {
-                mWebView.loadDataWithBaseURL(null,mUrl,"text/html", "utf-8", null);
-            }
-        }
     }
 
     @Override

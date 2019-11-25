@@ -1,10 +1,8 @@
-package com.xiaomawang.commonlib.widget.net;
+package com.xiaomawang.commonlib.data.remote;
 
-import androidx.lifecycle.MutableLiveData;
-
-import com.xiaomawang.commonlib.widget.net.exception.ApiException;
-import com.xiaomawang.commonlib.widget.net.exception.ExceptionEngine;
-import com.xiaomawang.commonlib.widget.net.exception.ServerException;
+import com.xiaomawang.commonlib.data.remote.exception.ApiException;
+import com.xiaomawang.commonlib.data.remote.exception.ExceptionEngine;
+import com.xiaomawang.commonlib.data.remote.exception.ServerException;
 
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;

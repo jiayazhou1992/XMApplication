@@ -41,5 +41,6 @@ dependencies {
 
     implementation project(':commonlib')
 
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
 }

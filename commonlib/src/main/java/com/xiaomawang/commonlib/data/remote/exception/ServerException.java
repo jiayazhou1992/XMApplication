@@ -1,4 +1,4 @@
-package com.xiaomawang.commonlib.widget.net.exception;
+package com.xiaomawang.commonlib.data.remote.exception;
 
 public class ServerException extends RuntimeException {
 

@@ -104,10 +104,7 @@ public abstract class BaseWebActivity extends XMActivity implements WebContract.
     protected void initView() {
         progressBar = findViewById(R.id.progressBar);
         mWebView = findViewById(R.id.webView);
-    }
 
-    @Override
-    protected void setView() {
         iv_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,7 +136,24 @@ public abstract class BaseWebActivity extends XMActivity implements WebContract.
                 mWebView.reload();
             }
         });
+
+        if (!StringUtils.isEmpty(mUrl)) {
+            if (ValidatorUtils.isAndroidUrl(mUrl)) {
+                if (addExtra){
+                    mUrl = mUrl + webOptions.getExtraParams(mUrl);
+                }
+                mReferer = mUrl;
+                if (addHeader) {
+                    mWebView.loadUrl(mUrl, webOptions.addExtraHeaders(mUrl, mHeaders));
+                }else {
+                    mWebView.loadUrl(mUrl);
+                }
+            }else {
+                mWebView.loadDataWithBaseURL(null,mUrl,"text/html", "utf-8", null);
+            }
+        }
     }
+
 
 
     /**
@@ -176,25 +190,6 @@ public abstract class BaseWebActivity extends XMActivity implements WebContract.
     @Override
     public void closeView() {
         finish();
-    }
-
-    @Override
-    protected void setData() {
-        if (!StringUtils.isEmpty(mUrl)) {
-            if (ValidatorUtils.isAndroidUrl(mUrl)) {
-                if (addExtra){
-                    mUrl = mUrl + webOptions.getExtraParams(mUrl);
-                }
-                mReferer = mUrl;
-                if (addHeader) {
-                    mWebView.loadUrl(mUrl, webOptions.addExtraHeaders(mUrl, mHeaders));
-                }else {
-                    mWebView.loadUrl(mUrl);
-                }
-            }else {
-                mWebView.loadDataWithBaseURL(null,mUrl,"text/html", "utf-8", null);
-            }
-        }
     }
 
 

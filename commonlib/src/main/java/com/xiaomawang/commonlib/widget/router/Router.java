@@ -4,23 +4,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.xiaomawang.commonlib.base.XMFragment;
-import com.xiaomawang.commonlib.utils.dev.DevUtils;
+import com.xiaomawang.commonlib.ui.web.BaseWebActivity;
+import com.xiaomawang.commonlib.ui.web.WebContract;
 import com.xiaomawang.commonlib.utils.dev.common.StringUtils;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +25,6 @@ import java.util.Set;
 
 public class Router {
     private static final String TAG = "Router";
-
-    public static final String connection_1 = "?";
-    public static final String connection_2 = "&";
-    public static final String connection_3 = "=";
 
     private static RouterOptions mOptions;
 
@@ -54,10 +47,10 @@ public class Router {
         String pagePath;
         boolean anim = true;
         boolean replace;
-        int requestCode = -1;//尽量不要重复 比如 以及页面 100+ 二级页面 200+
+        int requestCode = -1;
         Bundle data;
 
-        Page(AppCompatActivity context) {
+        private Page(AppCompatActivity context) {
             this.context = new WeakReference<>(context);
         }
 
@@ -158,10 +151,6 @@ public class Router {
                 }
             }
             this.pagePath = uri.getPath();
-//            if (this.pagePath != null && this.pagePath.startsWith("/")) {
-//                this.pagePath = this.pagePath.substring(1);
-//            }
-            //Log.i(TAG, " scheme " + uri.getScheme() + " host " + uri.getHost() + " path " + uri.getPath());
             return uri;
         }
 
@@ -198,19 +187,19 @@ public class Router {
             Uri uri = parsePath(this.pagePath);
             if (uri != null && !TextUtils.equals(uri.getScheme(), mOptions.scheme) && ("https".equals(uri.getScheme()) || "http".equals(uri.getScheme()))) {
                 //跳转html
-//                Intent intent = new Intent(this.context.get(), mOptions.webContainerActivityClass);
+                Intent intent = new Intent(this.context.get(), mOptions.webContainerActivityClass);
                 if (data == null) {
                     data = new Bundle();
                 }
-//                Bundle bundle = WebContract.getBundle(path, "", false, true, true);
-//                bundle.putAll(data);
-//                intent.putExtras(bundle);
-//                RouterFragment routerFragment = getRouterFragment(this.context.get());
-//                if (requestCode == -1) {
-//                    routerFragment.startActivity(intent);
-//                } else {
-//                    routerFragment.startActivityForResult(intent, requestCode, callBack);
-//                }
+                Bundle bundle = WebContract.getBundle(path, "", false, true, true);
+                bundle.putAll(data);
+                intent.putExtras(bundle);
+                RouterFragment routerFragment = getRouterFragment(this.context.get());
+                if (requestCode == -1) {
+                    routerFragment.startActivity(intent);
+                } else {
+                    routerFragment.startActivityForResult(intent, requestCode, callBack);
+                }
             }else {
                 //跳转原生
                 if (TextUtils.equals(this.context.get().getClass().getName(), containerClass.getName()) && (this.context.get() instanceof MultipleFragmentActivity)) {
@@ -220,7 +209,7 @@ public class Router {
                 } else {
                     //打开新的activity
                     RouterFragment routerFragment = getRouterFragment(this.context.get());
-                    if (this.context.get() instanceof SingleFragmentActivity && !routerFragment.haveTags()){
+                    if (this.context.get() instanceof SingleFragmentActivity && !routerFragment.isEmptyStack()){
                         //如果当前已处于SingleFragmentActivity且该activity里还没有fragment
                         routerFragment.startFragmentForResult(pagePath, replace, anim, requestCode, data, callBack);
                     }else {
@@ -296,7 +285,7 @@ public class Router {
         public String webContainerPath;
 
         //Activity html容器
-//        public Class<? extends BaseWebActivity> webContainerActivityClass;
+        public Class<? extends BaseWebActivity> webContainerActivityClass;
 
         //
         public String scheme;
@@ -307,7 +296,7 @@ public class Router {
         public RouterOptions(Builder builder) {
             this.mContainerClass = builder.mContainerClass;
             this.webContainerPath = builder.webContainerPath;
-//            this.webContainerActivityClass = builder.webContainerActivityClass;
+            this.webContainerActivityClass = builder.webContainerActivityClass;
             this.scheme = builder.scheme;
             this.host = builder.host;
             this.pathPrefix = builder.pathPrefix;
@@ -316,7 +305,7 @@ public class Router {
         public static class Builder{
             Class<? extends RouteActivity> mContainerClass = SingleFragmentActivity.class;
             String webContainerPath;
-//            Class<? extends BaseWebActivity> webContainerActivityClass;
+            Class<? extends BaseWebActivity> webContainerActivityClass;
             String scheme;
             String host;
             String pathPrefix;
@@ -335,10 +324,10 @@ public class Router {
                 return this;
             }
 
-//            public Builder setWebContainerActivityClass(Class<? extends BaseWebActivity> webContainerActivityClass) {
-//                this.webContainerActivityClass = webContainerActivityClass;
-//                return this;
-//            }
+            public Builder setWebContainerActivityClass(Class<? extends BaseWebActivity> webContainerActivityClass) {
+                this.webContainerActivityClass = webContainerActivityClass;
+                return this;
+            }
 
             public Builder setScheme(String scheme) {
                 this.scheme = scheme;

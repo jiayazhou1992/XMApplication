@@ -33,10 +33,9 @@ public class RouterFragment extends Fragment {
     public static final int MSG_JUMP_OVER = 1;
 
     private AppCompatActivity mActivity;
-    private List<String> tags = new ArrayList<>();
-
-    private Map<Integer, Router.CallBack> mCallbacks = new HashMap<>();
-    private Map<String, FragmentGoOptions> optionsMap = new HashMap<>();
+    private FragmentTagStack fragmentTagStack = new FragmentTagStack();
+    private Map<XMFragment, FragmentOptions> optionsMap = new HashMap<>();
+    private Router.CallBack activityForResultCallBack;
 
     // 正在跳转
     private boolean isJumping;
@@ -52,7 +51,8 @@ public class RouterFragment extends Fragment {
     private Runnable delayedRunnable;
 
     public static RouterFragment newInstance() {
-        return new RouterFragment();
+        RouterFragment fragment = new RouterFragment();
+        return fragment;
     }
 
     @Override
@@ -73,8 +73,8 @@ public class RouterFragment extends Fragment {
         mActivity = null;
     }
 
-    public boolean haveTags(){
-        return tags.size() > 0;
+    public boolean isEmptyStack(){
+        return fragmentTagStack.isEmpty();
     }
 
     @UiThread
@@ -85,25 +85,18 @@ public class RouterFragment extends Fragment {
         //TODO 关闭键盘
         KeyBoardUtils.closeKeyboard(mActivity);
 
-        if (callback != null) {
-            if (mCallbacks.containsKey(requestCode)){
-                throw new IllegalArgumentException("requestCode had callback");
-            }
-            mCallbacks.put(requestCode, callback);
-        }
-
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
 
         //隐藏or删除当前fragment
-        String currentFragmentTag = tags.size() > 0 ? tags.get(tags.size()-1) : "";
+        String currentFragmentTag = fragmentTagStack.getTop();
+        XMFragment currentFragment = (XMFragment) fragmentManager.findFragmentByTag(currentFragmentTag);
         if (replace && !StringUtils.isEmpty(currentFragmentTag)){
             //删除上一个fragment
             fragmentManager.popBackStackImmediate();
-            optionsMap.remove(currentFragmentTag);
-            tags.remove(currentFragmentTag);
+            fragmentTagStack.popStack();
+            optionsMap.remove(currentFragment);
         }else {
             //隐藏上一个fragment
-            XMFragment currentFragment = (XMFragment) fragmentManager.findFragmentByTag(currentFragmentTag);
             if (currentFragment != null) {
                 currentFragment.setUserVisibleHint(false);
             }
@@ -111,34 +104,22 @@ public class RouterFragment extends Fragment {
 
         //添加目标fragment
         XMFragment fragment = (XMFragment) ARouter.getInstance().build(path).with(data).navigation();
-        //如果已存在，path加后缀用来区分
-        if ((fragmentManager.findFragmentByTag(path) != null)){
-            path = String.format(path + "_r%4.0f", (Math.random()*10000));
-            if (fragment != null) {
-                fragment.setFragmentTag(path);
-                Log.i(TAG, "go --> " + "pagePath = " + path + " class = " + fragment.getClass().getName());
-            }else {
-                Log.e(TAG, "go --> " + "pagePath = " + path + " class = null");
-            }
-        }
-
         if (fragment==null){
             throw new IllegalArgumentException("找不到 path = " + path + " 的fragment");
         }
-
-        optionsMap.put(path, new FragmentGoOptions(requestCode, currentFragmentTag, anim));
+        optionsMap.put(fragment, new FragmentOptions(currentFragmentTag, requestCode, callback, anim));
 
         if (!fragment.isAdded()) {
-            tags.add(path);
-
+            String fragmentHashCode = String.valueOf(fragment.hashCode());
+            fragmentTagStack.addToStack(fragmentHashCode);
             if (anim) {
                 fragmentManager.beginTransaction().setCustomAnimations(R.anim.fragment_open_enter_anim, R.anim.fragment_close_exit_anim, R.anim.fragment_close_enter_anim, R.anim.fragment_open_exit_anim)
-                        .add(R.id.fragment_content, fragment, path)
-                        .addToBackStack(path)
+                        .add(R.id.fragment_content, fragment, fragmentHashCode)
+                        .addToBackStack(fragmentHashCode)
                         .commitAllowingStateLoss();
             }else {
-                fragmentManager.beginTransaction().add(R.id.fragment_content, fragment, path)
-                        .addToBackStack(path)
+                fragmentManager.beginTransaction().add(R.id.fragment_content, fragment, fragmentHashCode)
+                        .addToBackStack(fragmentHashCode)
                         .commitAllowingStateLoss();
             }
         }else {
@@ -151,29 +132,18 @@ public class RouterFragment extends Fragment {
         final boolean noData = (result == null);
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
 
-        if (tags.size()>1){
+        if (fragmentTagStack.isMore()){
             // 将要被弹出的fragment 的参数
-            FragmentGoOptions fragmentGoOptions = optionsMap.get(tags.get(tags.size()-1));
-            String from_tag = "";
-            int requestCode = -1;
-            if (fragmentGoOptions != null) {
-                from_tag = fragmentGoOptions.formTag;
-                requestCode = fragmentGoOptions.requestCode;
-                optionsMap.remove(tags.get(tags.size()-1));
-            }
-
+            Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentTagStack.getTop());
+            FragmentOptions fragmentOptions = optionsMap.get(currentFragment);
+            optionsMap.remove(currentFragment);
             fragmentManager.popBackStack();
-            tags.remove(tags.size()-1);
+            fragmentTagStack.popStack();
 
             // 找到上一个fragment
-            XMFragment currentFragment = (XMFragment) fragmentManager.findFragmentByTag(from_tag);
-            if (currentFragment == null) {
-                // 如果使用 from tag 没找到的话，就这样
-                String currentFragmentTag = tags.size() > 0 ? tags.get(tags.size() - 1) : "";
-                currentFragment = (XMFragment) fragmentManager.findFragmentByTag(currentFragmentTag);
-            }
-            if (currentFragment != null){
-                currentFragment.setUserVisibleHint(true);
+            XMFragment preFragment = (XMFragment) fragmentManager.findFragmentByTag(fragmentOptions.formTag);
+            if (preFragment != null){
+                preFragment.setUserVisibleHint(true);
             }
 
             mHandler.removeCallbacks(delayedRunnable);
@@ -181,7 +151,7 @@ public class RouterFragment extends Fragment {
             if (result != null) {
                 data.putExtras(result);
             }
-            onPageBack(requestCode, noData ? 0 : FRAGMENT_OK, data, fragmentGoOptions.anim);
+            onPageBack(fragmentOptions.requestCode, noData ? 0 : FRAGMENT_OK, data, fragmentOptions.anim, fragmentOptions.callBack);
 
         }else {
             // 清除延时
@@ -202,68 +172,20 @@ public class RouterFragment extends Fragment {
     @UiThread
     public void startActivityForResult(Intent intent, int requestCode, Router.CallBack callback) {
         Log.i(TAG, "startActivityForResult");
-        if (callback != null) {
-            mCallbacks.put(requestCode, callback);
-        }
+        activityForResultCallBack = callback;
         startActivityForResult(intent, requestCode);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        onPageBack(requestCode, resultCode, data, false);
-
-        if (!(mActivity instanceof RouteActivity)) {
-            // 让activity里的fragment回调onActivityResult
-            // RouteActivity 里已经处理过了
-            onPageResult(requestCode, resultCode, data);
-        }
+        onPageBack(requestCode, resultCode, data, false, activityForResultCallBack);
+        activityForResultCallBack = null;
     }
 
-    /**
-     * 回调fragment的onActivityResult
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    public void onPageResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onPageResult");
-
-        if (data != null) {
-            // TODO 传给首层fragment
-
-            Bundle bundle = data.getExtras();
-            String currentFragmentTag = bundle == null ? null : bundle.getString(FRAGMENT_FROM, null);
-            XMFragment currentFragment = (XMFragment) mActivity.getSupportFragmentManager().findFragmentByTag(currentFragmentTag);
-            if (currentFragment == null) {
-                Log.e(TAG, "没有找到currentFragment1 onFragmentResult");
-                String currentFragmentId = tags.size() > 0 ? tags.get(tags.size() - 1) : "";
-                currentFragment = (XMFragment) mActivity.getSupportFragmentManager().findFragmentByTag(currentFragmentId);
-
-                if (currentFragment != null){
-                    Log.e(TAG, "找到 onActivityResult");
-                    currentFragment.onActivityResult(requestCode, resultCode, data);
-                }else {
-                    Log.e(TAG, "没有找到currentFragment2 onFragmentResult");
-                }
-            }else {
-                Log.e(TAG, "找到 onFragmentResult");
-//                currentFragment.onFragmentResult(data.getExtras(), requestCode, resultCode);
-                currentFragment.onActivityResult(requestCode, resultCode, data);
-            }
-        }else {
-            Log.e(TAG, "onActivityResult no data 可能是图片选择 或其他吧");
-            String currentFragmentId = tags.size() > 0 ? tags.get(tags.size() - 1) : "";
-            XMFragment currentFragment = (XMFragment) mActivity.getSupportFragmentManager().findFragmentByTag(currentFragmentId);
-
-            if (currentFragment != null){
-                Log.e(TAG, "找到 onActivityResult");
-                currentFragment.onActivityResult(requestCode, resultCode, data);
-            }else {
-                Log.e(TAG, "没有找到currentFragment2 onFragmentResult");
-            }
-        }
+    public void onTopFragmentResult(int requestCode, int resultCode, Intent data) {
+        Fragment currentFragment = mActivity.getSupportFragmentManager().findFragmentByTag(fragmentTagStack.getTop());
+        currentFragment.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -273,10 +195,7 @@ public class RouterFragment extends Fragment {
      * @param data
      * @param delay 延时回调
      */
-    public void onPageBack(final int requestCode, final int resultCode, final Intent data, boolean delay){
-        final Router.CallBack callback = mCallbacks.get(requestCode);
-        mCallbacks.remove(requestCode);
-
+    public void onPageBack(final int requestCode, final int resultCode, final Intent data, boolean delay,final Router.CallBack callBack){
         if (delay) { // fragment 动画有点卡顿，尝试延迟回调
             delayedRunnable = new Runnable() {
                 @Override
@@ -284,8 +203,8 @@ public class RouterFragment extends Fragment {
                     //TODO 关闭键盘
                     KeyBoardUtils.closeKeyboard(mActivity);
 
-                    if (callback != null) {
-                        callback.onPageBack(requestCode, resultCode, data);
+                    if (callBack != null) {
+                        callBack.onPageBack(requestCode, resultCode, data);
                     } else {
                         Log.i(TAG, " requestCode = " + requestCode + " 没有 callback");
                     }
@@ -293,8 +212,8 @@ public class RouterFragment extends Fragment {
             };
             mHandler.postDelayed(delayedRunnable, 200);
         }else {
-            if (callback != null) {
-                callback.onPageBack(requestCode, resultCode, data);
+            if (callBack != null) {
+                callBack.onPageBack(requestCode, resultCode, data);
             } else {
                 Log.i(TAG, " requestCode = " + requestCode + " 没有 callback");
             }
@@ -308,43 +227,74 @@ public class RouterFragment extends Fragment {
     public boolean onBackPressed(){
         if (isJumping) return true;
 
-        if (tags.size()>0){
-            String tag = tags.get(tags.size()-1);
-            Log.i(TAG, tag);
-            XMFragment fragment = (XMFragment) mActivity.getSupportFragmentManager().findFragmentByTag(tag);
+        if (!fragmentTagStack.isEmpty()){
+            XMFragment fragment = (XMFragment) mActivity.getSupportFragmentManager().findFragmentByTag(fragmentTagStack.getTop());
             return fragment.onBackPressed();
         }
         return false;
     }
 
     /**
-     * go 前参数
+     * fragment参数
      */
-    private static class FragmentGoOptions{
-        int requestCode = -1;
-        String formTag = "";
+    private static class FragmentOptions{
+        String formTag;
+        int requestCode;
+        Router.CallBack callBack;
         boolean anim;
 
-        private FragmentGoOptions(int requestCode, String formTag, boolean anim) {
+        private FragmentOptions(String formTag, int requestCode, Router.CallBack callBack, boolean anim) {
             this.requestCode = requestCode;
             this.formTag = formTag;
             this.anim = anim;
+            this.callBack = callBack;
+        }
+    }
+
+    /**
+     *
+     */
+    private static class FragmentTagStack{
+        List<String> tags;
+
+        public FragmentTagStack() {
+            this.tags = new ArrayList<>();
         }
 
-        public int getRequestCode() {
-            return requestCode;
+        public String getTop() {
+            if (isEmpty()) {
+                return "";
+            } else {
+                return this.tags.get(this.tags.size() - 1);
+            }
         }
 
-        public void setRequestCode(int requestCode) {
-            this.requestCode = requestCode;
+        public void addToStack(String tag) {
+            this.tags.add(tag);
         }
 
-        public String getFormTag() {
-            return formTag;
+        public void popStack() {
+            if (!isEmpty()) {
+                this.tags.remove(this.tags.size() - 1);
+            }
         }
 
-        public void setFormTag(String formTag) {
-            this.formTag = formTag;
+        public void popStack(String tag) {
+            if (!isEmpty()) {
+                this.tags.remove(tag);
+            }
+        }
+
+        public boolean isEmpty() {
+            return tags == null || tags.isEmpty();
+        }
+
+        public boolean isMore() {
+            return tags != null && tags.size() > 1;
+        }
+
+        public void clear() {
+            this.tags.clear();
         }
     }
 
@@ -357,6 +307,8 @@ public class RouterFragment extends Fragment {
         }
         mHandler = null;
         mActivity = null;
+        activityForResultCallBack = null;
+        fragmentTagStack.clear();
         super.onDestroyView();
     }
 }

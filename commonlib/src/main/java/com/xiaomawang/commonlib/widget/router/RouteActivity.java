@@ -1,5 +1,6 @@
 package com.xiaomawang.commonlib.widget.router;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.xiaomawang.commonlib.R;
@@ -44,12 +45,7 @@ public class RouteActivity extends XMActivity {
     }
 
     @Override
-    protected void setView() {
-
-    }
-
-    @Override
-    protected void setData() {
+    protected void initViewModel() {
 
     }
 
@@ -58,6 +54,12 @@ public class RouteActivity extends XMActivity {
      * */
     protected void toFragment(){
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Router.getRouterFragment(this).onTopFragmentResult(requestCode, resultCode, data);
     }
 
     @Override

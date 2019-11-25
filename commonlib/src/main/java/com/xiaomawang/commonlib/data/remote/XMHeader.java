@@ -1,4 +1,4 @@
-package com.xiaomawang.commonlib.widget.net;
+package com.xiaomawang.commonlib.data.remote;
 
 import com.xiaomawang.commonlib.data.bean.BaseBeen;
 

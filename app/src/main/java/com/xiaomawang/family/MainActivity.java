@@ -38,19 +38,15 @@ public class MainActivity extends XMActivity {
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Router.with(MainActivity.this).pageGo("/test/fragment");
-//                ARouter.getInstance().build("/test/fragment").withString("test", "yazhou").navigation();
+                Bundle bundle = new Bundle();
+                bundle.putString("test","yazhou");
+                Router.with(MainActivity.this).setData(bundle).pageGo("/test/fragment");
             }
         });
     }
 
     @Override
-    protected void setView() {
-
-    }
-
-    @Override
-    protected void setData() {
+    protected void initViewModel() {
 
     }
 }

@@ -16,6 +16,7 @@ import com.xiaomawang.commonlib.base.XMApplication;
 import com.xiaomawang.commonlib.ui.web.bean.MessageFromJS;
 import com.xiaomawang.commonlib.ui.web.bean.MessageToJS;
 import com.xiaomawang.commonlib.ui.widget.SwipeBackLayout;
+import com.xiaomawang.commonlib.widget.gson.GsonHelper;
 
 import butterknife.ButterKnife;
 
@@ -23,8 +24,6 @@ public abstract class BaseWebJsPage extends BaseWebFragment implements WebContra
     private static final String TAG = "BaseWebJsPage";
 
     protected ProgressBar progressBar_status;
-
-    protected Gson gson;
 
     @Override
     protected int getContentId() {
@@ -60,17 +59,9 @@ public abstract class BaseWebJsPage extends BaseWebFragment implements WebContra
 
     @Override
     protected void initView() {
+        mUrl = initPageUrl();
         super.initView();
         progressBar_status = findView(R.id.progressBar_status);
-    }
-
-    @Override
-    protected void setData() {
-        gson = new GsonBuilder().enableComplexMapKeySerialization().create();
-
-        mUrl = initPageUrl();
-
-        super.setData();
     }
 
     protected String initPageUrl(){
@@ -106,7 +97,7 @@ public abstract class BaseWebJsPage extends BaseWebFragment implements WebContra
 
     @Override
     public void sendDataToJs(MessageToJS jsMessage) {
-        String js = String.format("javascript:ANJSBridge._handleMessageFromNative(%s)", gson.toJson(jsMessage));
+        String js = String.format("javascript:ANJSBridge._handleMessageFromNative(%s)", GsonHelper.gsonString(jsMessage));
         mWebView.evaluateJavascript(js, null);
     }
 

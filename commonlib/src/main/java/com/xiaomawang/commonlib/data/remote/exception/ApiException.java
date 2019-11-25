@@ -1,24 +1,24 @@
-package com.xiaomawang.commonlib.widget.net.exception;
+package com.xiaomawang.commonlib.data.remote.exception;
 
 public class ApiException extends Exception{
-    private String statusCode;//错误码
+    private int statusCode;//错误码
     private String statusDesc;//错误信息
 
-    public ApiException(Throwable throwable, String statusCode) {
+    public ApiException(Throwable throwable, int statusCode) {
         super(throwable);
         this.statusCode = statusCode;
     }
 
-    public ApiException(String statusCode, String statusDesc) {
+    public ApiException(int statusCode, String statusDesc) {
         this.statusCode = statusCode;
         this.statusDesc = statusDesc;
     }
 
-    public String getStatusCode() {
+    public int getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(String statusCode) {
+    public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
 

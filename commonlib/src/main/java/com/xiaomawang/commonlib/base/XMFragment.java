@@ -161,7 +161,7 @@ public abstract class XMFragment extends Fragment {
         delayedRunnable = new Runnable() {
             @Override
             public void run() {
-                setViewDataAfterAnima(); //放在动画之后，防止切换卡顿
+                setViewDataDelayed(); //放在动画之后，防止切换卡顿
             }
         };
         rootView.postDelayed(delayedRunnable,150);
@@ -198,10 +198,9 @@ public abstract class XMFragment extends Fragment {
     protected abstract void initViewModel();
 
     //放在动画之后，防止切换卡顿
-    protected void setViewDataAfterAnima(){
+    protected void setViewDataDelayed(){
 
     }
-
 
     @Override
     public void onResume() {
